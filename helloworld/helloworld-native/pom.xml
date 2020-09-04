@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>ro.rasel.jni</groupId>
+    <artifactId>helloworld-native</artifactId>
+    <version>0.1-SNAPSHOT</version>
+    <packaging>so</packaging>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-install-plugin</artifactId>
+                <version>2.5.2</version>
+                <configuration>
+                    <skip>true</skip>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>native-maven-plugin</artifactId>
+                <version>1.0-alpha-8</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <compilerProvider>generic-classic</compilerProvider>
+                    <compilerExecutable>g++</compilerExecutable>
+                    <linkerExecutable>g++</linkerExecutable>
+                    <sources>
+                        <source>
+                            <directory>${basedir}/src/main/cpp</directory>
+                            <includes>
+                                <include>**/*.cpp</include>
+                            </includes>
+                        </source>
+                    </sources>
+                    <!--g++ -c -fPIC -I${JAVA_HOME}/include -I${JAVA_HOME}/include/linux helloworld/helloworld-native/src/main/cpp/ro_rasel_jni_HelloWorldJNI.cpp -o helloworld/helloworld-native/src/main/cpp/ro_rasel_jni_HelloWorldJNI.o-->
+                    <!--g++ -shared -fPIC -o elloworld/helloworld-native/src/main/cpp/libnative.so helloworld/helloworld-native/src/main/cpp/ro_rasel_jni_HelloWorldJNI.o -lc-->
+                    <compilerStartOptions>
+                        <compilerEndOption>-fPIC</compilerEndOption>
+                        <compilerEndOption>-c</compilerEndOption>
+                        <compilerStartOption>-I ${JAVA_HOME}/include/</compilerStartOption>
+                        <compilerStartOption>-I ${JAVA_HOME}/include/linux/</compilerStartOption>
+                    </compilerStartOptions>
+                    <linkerStartOptions>
+                        <linkerEndOption>-shared</linkerEndOption>
+                        <linkerEndOption>-fPIC</linkerEndOption>
+                        <linkerEndOption>-lc</linkerEndOption>
+                        <linkerStartOption>-I ${JAVA_HOME}/include/</linkerStartOption>
+                        <linkerStartOption>-I ${JAVA_HOME}/include/linux/</linkerStartOption>
+                        <linkerStartOption>-I ${JAVA_HOME}/lib/</linkerStartOption>
+                    </linkerStartOptions>
+                    <linkerFinalName>${artifactId}</linkerFinalName>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
